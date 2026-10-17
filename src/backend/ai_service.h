@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <fstream>
 #include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #ifdef _WIN32
 #include <windows.h>
 #include <wininet.h>
