@@ -1,0 +1,18 @@
+# Executables and build outputs
+*.exe
+*.o
+*.obj
+*.tmp
+build/
+
+# Private keys and environment configurations
+.env
+data/gemini_key.txt
+
+# Session cookies and temporary logs
+cookies.txt
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyMate 3D — Your Intelligent Study Universe</title>
+  <meta name="description" content="AI-powered live study planner with interactive Three.js 3D universe, focus timer, and timetable.">
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- ================= LANDING SECTION ================= -->
+  <div id="landing-section" style="display: none; min-height: 100vh;">
+    <!-- Landing Header -->
+    <header style="padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); background: var(--bg-glass); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div class="brand-icon">🪐</div>
+        <div class="brand-text">
+          <h2>StudyMate 3D</h2>
+          <span>Intelligent Universe</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <button id="landing-login-btn" class="action-btn">Sign In</button>
+        <button id="landing-signup-btn" class="btn-primary action-btn">Create Free Account</button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section style="padding: 6rem 2rem 4rem 2rem; max-width: 1200px; margin: 0 auto; text-align: center;">
+      <div style="display: inline-block; padding: 0.4rem 1rem; border-radius: var(--radius-full); background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3); color: var(--accent-purple); font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;">
+        ⚡ Powered by C++17 Engine &amp; AI Intelligence
+      </div>
+      <h1 style="font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.03em;">
+        Your Study Life, <br><span style="background: var(--gradient-cosmic); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Reimagined in 3D.</span>
+      </h1>
+      <p style="font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--text-secondary); max-width: 750px; margin: 0 auto 2.5rem auto;">
+        Plan smarter with AI, explore your subjects and deadlines in a real-time interactive 3D universe, and turn everyday study sessions into real progress.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-primary action-btn" style="padding: 0.85rem 1.75rem; font-size: 1.05rem;" onclick="app.openAuthModal('signup')">
+          Launch Your Study Galaxy 🚀
+        </button>
+        <button class="action-btn" style="padding: 0.85rem 1.75rem; font-size: 1.05rem;" onclick="app.openAuthModal('login')">
+          Sign In to Account
+        </button>
+      </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section style="padding: 4rem 2rem; max-width: 1200px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div class="glass-card">
+          <div style="font-size: 2.2rem; margin-bottom: 1rem;">🪐</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Interactive 3D Study Universe</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Watch your subjects form celestial orbits and active tasks become interactive asteroids. Hover, zoom, and rotate to inspect your academic universe.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <div style="font-size: 2.2rem; margin-bottom: 1rem;">🤖</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">AI Personalized Planner</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Powered by high-performance C++ backend with Google Gemini and cognitive rule-based fallback. Balances workload and prevents burnout.
+          </p>
+        </div>
+
+        <div class="glass-card">
+          <div style="font-size: 2.2rem; margin-bottom: 1rem;">⏱️</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Focus Engine &amp; Gamification</h3>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Built-in Pomodoro focus timer, active streaks tracking, milestone achievements, and granular progress analytics.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= MAIN APPLICATION SHELL ================= -->
+  <div id="app-shell" class="app-container" style="display: none;">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">🪐</div>
+        <div class="brand-text">
+          <h2>StudyMate 3D</h2>
+          <span>Intelligent Universe</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" data-view="subjects">
+          <span class="nav-icon">📚</span>
+          <span>Subjects</span>
+        </a>
+        <a class="nav-item" data-view="tasks">
+          <span class="nav-icon">✅</span>
+          <span>Tasks &amp; Todos</span>
+        </a>
+        <a class="nav-item" data-view="ai-planner">
+          <span class="nav-icon">✨</span>
+          <span>AI Study Planner</span>
+        </a>
+        <a class="nav-item" data-view="timetable">
+          <span class="nav-icon">🗓️</span>
+          <span>Weekly Timetable</span>
+        </a>
+        <a class="nav-item" data-view="focus">
+          <span class="nav-icon">⏱️</span>
+          <span>Focus Mode</span>
+        </a>
+        <a class="nav-item" data-view="progress">
+          <span class="nav-icon">🏆</span>
+          <span>Progress &amp; Badges</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div id="user-avatar" class="user-avatar">U</div>
+          <div class="user-info">
+            <div id="user-display-name" class="user-name">Student</div>
+            <div id="user-display-email" class="user-sub">@student</div>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn-danger action-btn" style="width: 100%; justify-content: center; font-size: 0.82rem;">
+          Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="mobile-menu-btn" class="mobile-menu-btn">☰</button>
+          <div class="nav-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search tasks, subjects...">
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
+            <span class="theme-icon">☀️</span>
+          </button>
+          <button class="btn-primary action-btn" onclick="app.openNewTaskModal()">
+            + New Task
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEWS -->
+      <main class="page-view">
+
+        <!-- VIEW: DASHBOARD -->
+        <div id="view-dashboard" class="view-container">
+          
+          <!-- Tooltip for Scene -->
+          <div id="universe-tooltip" class="universe-tooltip"></div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="glass-card stat-card">
+              <div class="stat-icon purple">📚</div>
+              <div>
+                <div id="stat-total-subjects" class="stat-value">0</div>
+                <div class="stat-label">Active Subjects</div>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon cyan">✅</div>
+              <div>
+                <div id="stat-pending-tasks" class="stat-value">0</div>
+                <div class="stat-label">Pending Tasks</div>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon mint">🎯</div>
+              <div>
+                <div id="stat-completed-tasks" class="stat-value">0</div>
+                <div class="stat-label">Completed Tasks</div>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon amber">🔥</div>
+              <div>
+                <div id="stat-streak" class="stat-value">0 Days</div>
+                <div class="stat-label">Study Streak</div>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon rose">⏱️</div>
+              <div>
+                <div id="stat-today-study" class="stat-value">0m</div>
+                <div class="stat-label">Today's Focus</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Completion Progress Card -->
+          <div class="glass-card" style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700;">Overall Study Completion</h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">Calculated across all stored task deadlines and milestones.</p>
+              </div>
+              <span id="stat-comp-pct" style="font-size: 1.5rem; font-weight: 800; color: var(--accent-purple);">0%</span>
+            </div>
+            <div style="width: 100%; height: 10px; background: rgba(255, 255, 255, 0.06); border-radius: var(--radius-full); overflow: hidden;">
+              <div id="dash-progress-fill" style="width: 0%; height: 100%; background: var(--gradient-cosmic); border-radius: var(--radius-full); transition: width 0.5s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Quick Action Banner & Upcoming Tasks -->
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.15rem; font-weight: 700;">Upcoming Deadlines</h3>
+                <button class="action-btn" style="font-size: 0.8rem;" onclick="app.switchView('tasks')">View All</button>
+              </div>
+              <div id="dash-upcoming-tasks">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+            <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="font-size: 2rem; margin-bottom: 0.75rem;">✨</div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem;">AI Personalized Planner</h3>
+                <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                  Let our C++ cognitive engine schedule your week with optimal focus blocks and break intervals.
+                </p>
+              </div>
+              <button class="btn-primary action-btn" style="margin-top: 1.5rem; width: 100%; justify-content: center;" onclick="app.switchView('ai-planner')">
+                Generate Plan Now
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- VIEW: SUBJECTS -->
+        <div id="view-subjects" class="view-container" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+              <h2 style="font-size: 1.75rem; font-weight: 800;">Academic Subjects</h2>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">Manage your course modules, target hours, and difficulty ratings.</p>
+            </div>
+            <button id="btn-new-subject" class="btn-primary action-btn">+ Add Subject</button>
+          </div>
+          <div id="subjects-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- VIEW: TASKS -->
+        <div id="view-tasks" class="view-container" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+              <h2 style="font-size: 1.75rem; font-weight: 800;">Study Tasks &amp; Milestones</h2>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">Organize assignments, problem sets, and revision sessions.</p>
+            </div>
+            <button id="btn-new-task" class="btn-primary action-btn">+ Add Task</button>
+          </div>
+          <div class="glass-card" style="padding: 0; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                  <th style="padding: 1rem; width: 40px;">Status</th>
+                  <th style="padding: 1rem;">Task Title</th>
+                  <th style="padding: 1rem;">Subject</th>
+                  <th style="padding: 1rem;">Deadline</th>
+                  <th style="padding: 1rem;">Priority</th>
+                  <th style="padding: 1rem; text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tasks-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- VIEW: AI PLANNER -->
+        <div id="view-ai-planner" class="view-container" style="display: none;">
+          <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.75rem; font-weight: 800;">AI Study Planner</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">
+              Generate balanced, scientifically scheduled timetables with automatic conflict detection.
+            </p>
+          </div>
+
+          <div class="glass-card" style="margin-bottom: 2rem; border-top: 4px solid var(--accent-purple); box-shadow: var(--shadow-glow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+              <div>
+                <h3 style="font-size:1.25rem; font-weight:800; display:flex; align-items:center; gap:0.5rem;">
+                  <span>🧠</span> Personalized Adaptive Parameters
+                </h3>
+                <p style="font-size:0.86rem; color:var(--text-secondary);">Enter whatever you want to study below — exam topics, subjects, chapters, or homework.</p>
+              </div>
+              <div style="display:flex; gap:0.5rem; align-items:center;">
+                <span id="ai-engine-status-badge" style="font-size:0.75rem; font-weight:700; padding:0.35rem 0.75rem; border-radius:var(--radius-full); background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.3); color:var(--accent-purple); display:flex; align-items:center; gap:0.4rem;">
+                  <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-cyan);"></span>
+                  <span id="ai-engine-status-text">Checking AI Engine...</span>
+                </span>
+                <button type="button" class="action-btn" style="padding:0.4rem 0.85rem; font-size:0.8rem; background:rgba(255,255,255,0.06);" onclick="app.toggleAIKeyModal()">🔑 Configure Gemini API</button>
+                <button type="button" class="action-btn" style="padding:0.4rem 0.85rem; font-size:0.8rem;" onclick="app.clearAIInputs()">🧹 Clear Fields</button>
+              </div>
+            </div>
+
+            <!-- API Key Configuration Panel (Collapsible) -->
+            <div id="ai-key-config-panel" style="display:none; margin-bottom:1.5rem; padding:1.25rem; border-radius:var(--radius-md); background:rgba(0,0,0,0.3); border:1px solid rgba(139,92,246,0.3);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <h4 style="font-size:0.95rem; font-weight:700; color:var(--accent-cyan); display:flex; align-items:center; gap:0.4rem;">
+                  <span>🤖</span> Direct Google Gemini API Integration
+                </h4>
+                <button type="button" class="action-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="app.toggleAIKeyModal()">✕ Close</button>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:1rem; line-height:1.4;">
+                Connect real Google Gemini 1.5 Flash directly through your C++ backend. Your key is stored securely on your local server (<code style="color:var(--accent-mint);">data/gemini_key.txt</code>) and never exposed publicly.
+              </p>
+              <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                <input type="password" id="gemini-api-key-input" class="form-control" style="flex:1; min-width:260px;" placeholder="Paste your Gemini API key (AIzaSy...)" autocomplete="off">
+                <button type="button" class="btn-primary action-btn" style="padding:0.6rem 1.4rem;" onclick="app.saveGeminiKey()">💾 Save &amp; Connect Key</button>
+                <button type="button" class="action-btn" style="padding:0.6rem 1rem;" onclick="app.clearGeminiKey()">Remove Key</button>
+              </div>
+              <div id="gemini-key-status" style="margin-top:0.6rem; font-size:0.8rem; color:var(--text-secondary);"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
+              <div class="form-group" style="margin: 0;">
+                <label>Daily Study Hour Limit</label>
+                <input type="number" id="ai-hours-limit" class="form-control" value="4" min="1" max="14">
+              </div>
+
+              <div class="form-group" style="margin: 0;">
+                <label>Preferred Session Duration (mins)</label>
+                <input type="number" id="ai-session-len" class="form-control" value="45" min="15" max="180">
+              </div>
+
+              <div class="form-group" style="margin: 0;">
+                <label>Preferred Start Time</label>
+                <input type="time" id="ai-start-time" class="form-control" value="09:00">
+              </div>
+
+              <div class="form-group" style="margin: 0;">
+                <label>Primary Focus Goal / Topic</label>
+                <input type="text" id="ai-focus-goal" class="form-control" placeholder="e.g. Master Midterm Chapters">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Custom Instructions or Student Notes</label>
+              <textarea id="ai-prompt-input" class="form-control" rows="3" placeholder="e.g. I have a major calculus exam on Thursday and 2 lab reports. Give more revision time to difficult modules and insert regular breaks."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+              <button id="ai-generate-btn" class="btn-primary action-btn" style="padding: 0.85rem 2.25rem; font-size: 1.05rem; box-shadow: var(--shadow-glow);">
+                ✨ Synthesize My AI Plan
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div id="ai-loading" style="display: none; align-items: center; justify-content: center; flex-direction: column; padding: 4rem; gap: 1rem;">
+            <div style="font-size: 3rem; animation: spin 1.5s linear infinite;">🪐</div>
+            <h3 style="font-size: 1.2rem; font-weight: 700;">Synthesizing Cognitive Study Schedule...</h3>
+            <p style="color: var(--text-secondary); font-size: 0.85rem;">Analyzing task priorities, deadlines, and subject confidence.</p>
+          </div>
+
+          <!-- AI Plan Output Container -->
+          <div id="ai-plan-result" style="display: none;"></div>
+        </div>
+
+        <!-- VIEW: TIMETABLE -->
+        <div id="view-timetable" class="view-container" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+              <h2 style="font-size: 1.75rem; font-weight: 800;">Weekly Timetable</h2>
+              <p style="color: var(--text-secondary); font-size: 0.9rem;">Your synchronized study calendar and scheduled deep work blocks.</p>
+            </div>
+            <button class="btn-primary action-btn" onclick="app.switchView('ai-planner')">✨ New AI Schedule</button>
+          </div>
+          <div id="timetable-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- VIEW: FOCUS MODE -->
+        <div id="view-focus" class="view-container" style="display: none;">
+          <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">Deep Focus Engine</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem;">
+              Monotonic study timer synced directly with backend analytics.
+            </p>
+
+            <div class="glass-card" style="padding: 3rem 2rem;">
+              <div style="display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 2rem;">
+                <button class="action-btn timer-mode-btn active" data-mode="pomodoro">Pomodoro (25m)</button>
+                <button class="action-btn timer-mode-btn" data-mode="short_break">Short Break (5m)</button>
+                <button class="action-btn timer-mode-btn" data-mode="long_break">Long Break (15m)</button>
+              </div>
+
+              <!-- Circular Progress SVG -->
+              <div style="position: relative; width: 220px; height: 220px; margin: 0 auto 2rem auto;">
+                <svg width="220" height="220" style="transform: rotate(-90deg);">
+                  <circle cx="110" cy="110" r="90" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="none" />
+                  <circle id="timer-progress-ring" cx="110" cy="110" r="90" stroke="var(--accent-purple)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="0" style="transition: stroke-dashoffset 1s linear;" />
+                </svg>
+                <div id="timer-display" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; letter-spacing: -0.03em;">
+                  25:00
+                </div>
+              </div>
+
+              <div class="form-group" style="max-width: 320px; margin: 0 auto 1.75rem auto;">
+                <label>Focusing on Subject:</label>
+                <select id="timer-subject-select" class="form-control">
+                  <option value="">-- Select Subject --</option>
+                </select>
+              </div>
+
+              <div style="display: flex; justify-content: center; gap: 1rem;">
+                <button id="timer-start-btn" class="btn-primary action-btn" style="padding: 0.75rem 2rem; font-size: 1rem;">
+                  Start Focus
+                </button>
+                <button id="timer-reset-btn" class="action-btn" style="padding: 0.75rem 1.5rem;">
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: PROGRESS & BADGES -->
+        <div id="view-progress" class="view-container" style="display: none;">
+          <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.75rem; font-weight: 800;">Progress Analytics &amp; Achievements</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Track your long-term study momentum, recorded focus hours, and earned milestones.</p>
+          </div>
+
+          <div class="stats-grid" style="margin-bottom: 2rem;">
+            <div class="glass-card stat-card">
+              <div class="stat-icon amber">🔥</div>
+              <div>
+                <div id="prog-streak-val" class="stat-value">0 Days</div>
+                <div class="stat-label">Active Streak</div>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon purple">⏱️</div>
+              <div>
+                <div id="prog-total-mins" class="stat-value">0 Mins</div>
+                <div class="stat-label">Total Time Logged</div>
+              </div>
+            </div>
+
+            <div class="glass-card stat-card">
+              <div class="stat-icon mint">🎯</div>
+              <div>
+                <div id="prog-comp-val" class="stat-value">0%</div>
+                <div class="stat-label">Tasks Finished</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Subject Performance</h3>
+              <div id="prog-subjects-container"></div>
+            </div>
+
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Milestone Badges</h3>
+              <div id="prog-achievements-container" style="display: flex; flex-direction: column; gap: 0.75rem;"></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="auth-modal-title" style="font-size: 1.15rem; font-weight: 700;">Account</h3>
+        <button class="modal-close action-btn" style="padding: 0.2rem 0.5rem;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="auth-name-group" class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="auth-name" class="form-control" placeholder="Alex Student">
+        </div>
+        <div id="auth-email-group" class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="auth-email" class="form-control" placeholder="alex@domain.com">
+        </div>
+        <div class="form-group">
+          <label>Username (or Email if logging in)</label>
+          <input type="text" id="auth-username" class="form-control" placeholder="username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="auth-password" class="form-control" placeholder="••••••••">
+        </div>
+        <p id="auth-switch-text" style="font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-top: 1rem;"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn modal-close">Cancel</button>
+        <button id="auth-submit-btn" class="btn-primary action-btn">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECT MODAL -->
+  <div id="subject-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="subject-modal-title" style="font-size: 1.15rem; font-weight: 700;">Create Subject</h3>
+        <button class="modal-close action-btn" style="padding: 0.2rem 0.5rem;">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="subject-modal-id">
+        <div class="form-group">
+          <label>Subject Name *</label>
+          <input type="text" id="subject-name" class="form-control" placeholder="e.g. Distributed Systems">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="subject-desc" class="form-control" placeholder="Key concepts and syllabus info">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Color Accent</label>
+            <input type="color" id="subject-color" class="form-control" value="#8b5cf6" style="height: 42px; padding: 2px;">
+          </div>
+          <div class="form-group">
+            <label>Target Hours / Week</label>
+            <input type="number" id="subject-hours" class="form-control" value="10" min="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Difficulty</label>
+          <select id="subject-difficulty" class="form-control">
+            <option value="Easy">Easy</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn modal-close">Cancel</button>
+        <button id="modal-save-subject" class="btn-primary action-btn">Save Subject</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK MODAL -->
+  <div id="task-modal" class="modal-backdrop">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="task-modal-title" style="font-size: 1.15rem; font-weight: 700;">Create Study Task</h3>
+        <button class="modal-close action-btn" style="padding: 0.2rem 0.5rem;">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="task-modal-id">
+        <div class="form-group">
+          <label>Task Title *</label>
+          <input type="text" id="task-title" class="form-control" placeholder="e.g. Complete Lab Exercise 3">
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <select id="task-subject" class="form-control">
+            <option value="">-- Select Subject --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description / Notes</label>
+          <textarea id="task-desc" class="form-control" rows="2" placeholder="Details, references, chapter numbers"></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" id="task-due" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Estimated Duration (mins)</label>
+            <input type="number" id="task-duration" class="form-control" value="45" min="5" step="5">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="task-priority" class="form-control">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn modal-close">Cancel</button>
+        <button id="modal-save-task" class="btn-primary action-btn">Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Custom Scripts -->
+  <script src="/js/antigravity_bg.js"></script>
+  <script src="/js/universe.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
