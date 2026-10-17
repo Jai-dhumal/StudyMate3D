@@ -405,81 +405,17 @@ class StudyMateApp {
     this.showToast('Inputs cleared. Type your custom topic and click Synthesize!', 'info');
   }
 
-  toggleAIKeyModal() {
-    const panel = document.getElementById('ai-key-config-panel');
-    if (!panel) return;
-    const isHidden = panel.style.display === 'none' || !panel.style.display;
-    panel.style.display = isHidden ? 'block' : 'none';
-    if (isHidden) {
-      this.checkAIConfig();
-    }
-  }
-
   async checkAIConfig() {
     try {
       const res = await fetch('/api/ai/config');
       if (res.ok) {
         const data = await res.json();
         const badge = document.getElementById('ai-engine-status-text');
-        const statusEl = document.getElementById('gemini-key-status');
-        const input = document.getElementById('gemini-api-key-input');
-
-        if (data.has_key) {
-          if (badge) badge.textContent = 'Active: Google Gemini 1.5 Flash';
-          if (statusEl) statusEl.innerHTML = `<span style="color:var(--accent-mint);">✓ Connected to Google Gemini API (Key: ${data.masked_key})</span>`;
-          if (input && !input.value) input.placeholder = `Configured (${data.masked_key}) - paste new to change`;
-        } else {
-          if (badge) badge.textContent = 'Active: StudyMate Cognitive Engine';
-          if (statusEl) statusEl.innerHTML = `<span style="color:var(--text-secondary);">Using built-in C++ Cognitive Planner. Enter a Gemini API key above to enable direct Gemini 1.5 Flash cloud AI.</span>`;
+        if (badge) {
+          badge.textContent = data.has_key ? '⚡ Google Gemini 1.5 Flash' : '🧠 Cognitive Study Engine';
         }
       }
-    } catch (e) {
-      console.warn('Could not check AI config:', e);
-    }
-  }
-
-  async saveGeminiKey() {
-    const input = document.getElementById('gemini-api-key-input');
-    if (!input || !input.value.trim()) {
-      this.showToast('Please paste a valid Gemini API key first.', 'warning');
-      return;
-    }
-    const key = input.value.trim();
-    try {
-      const res = await fetch('/api/ai/config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ api_key: key })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        input.value = '';
-        this.showToast('Gemini API key connected successfully! AI will now generate plans via Gemini 1.5 Flash.', 'success');
-        this.checkAIConfig();
-      } else {
-        this.showToast('Failed to save API key.', 'error');
-      }
-    } catch (e) {
-      this.showToast('Network error while saving API key.', 'error');
-    }
-  }
-
-  async clearGeminiKey() {
-    try {
-      const res = await fetch('/api/ai/config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ api_key: '' })
-      });
-      if (res.ok) {
-        const input = document.getElementById('gemini-api-key-input');
-        if (input) input.placeholder = 'Paste your Gemini API key (AIzaSy...)';
-        this.showToast('API key removed. Reverted safely to Cognitive Engine.', 'info');
-        this.checkAIConfig();
-      }
-    } catch (e) {
-      this.showToast('Error removing key.', 'error');
-    }
+    } catch (e) {}
   }
 
   renderAIPlanner() {

@@ -607,11 +607,11 @@ public:
             int api_code = resp_json["error"]["code"].as_int(400);
             PlanResult fallback = generate_rule_based_plan(input, subjects, tasks, current_date);
             if (api_err_msg.find("API key not valid") != std::string::npos || api_code == 400 || api_code == 403) {
-                fallback.conflict_warnings.push_back("Gemini API Error: Invalid or expired API Key. Please verify your key under 'Configure Gemini API'.");
+                fallback.conflict_warnings.push_back("Server AI Notice: The configured GEMINI_API_KEY was invalid or not authorized. Generated plan with adaptive cognitive engine.");
             } else if (api_code == 429) {
-                fallback.conflict_warnings.push_back("Gemini API Quota Exceeded (HTTP 429). Used adaptive cognitive engine.");
+                fallback.conflict_warnings.push_back("Server AI Notice: Gemini rate limit reached (HTTP 429). Generated plan with adaptive cognitive engine.");
             } else {
-                fallback.conflict_warnings.push_back("Gemini API Notice: " + api_err_msg);
+                fallback.conflict_warnings.push_back("Server AI Notice: " + api_err_msg);
             }
             return fallback;
         }

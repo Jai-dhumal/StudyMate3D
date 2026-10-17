@@ -317,30 +317,10 @@
               <div style="display:flex; gap:0.5rem; align-items:center;">
                 <span id="ai-engine-status-badge" style="font-size:0.75rem; font-weight:700; padding:0.35rem 0.75rem; border-radius:var(--radius-full); background:rgba(139,92,246,0.15); border:1px solid rgba(139,92,246,0.3); color:var(--accent-purple); display:flex; align-items:center; gap:0.4rem;">
                   <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-cyan);"></span>
-                  <span id="ai-engine-status-text">Checking AI Engine...</span>
+                  <span id="ai-engine-status-text">⚡ AI Engine Active</span>
                 </span>
-                <button type="button" class="action-btn" style="padding:0.4rem 0.85rem; font-size:0.8rem; background:rgba(255,255,255,0.06);" onclick="app.toggleAIKeyModal()">🔑 Configure Gemini API</button>
                 <button type="button" class="action-btn" style="padding:0.4rem 0.85rem; font-size:0.8rem;" onclick="app.clearAIInputs()">🧹 Clear Fields</button>
               </div>
-            </div>
-
-            <!-- API Key Configuration Panel (Collapsible) -->
-            <div id="ai-key-config-panel" style="display:none; margin-bottom:1.5rem; padding:1.25rem; border-radius:var(--radius-md); background:rgba(0,0,0,0.3); border:1px solid rgba(139,92,246,0.3);">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-                <h4 style="font-size:0.95rem; font-weight:700; color:var(--accent-cyan); display:flex; align-items:center; gap:0.4rem;">
-                  <span>🤖</span> Direct Google Gemini API Integration
-                </h4>
-                <button type="button" class="action-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="app.toggleAIKeyModal()">✕ Close</button>
-              </div>
-              <p style="font-size:0.82rem; color:var(--text-secondary); margin-bottom:1rem; line-height:1.4;">
-                Connect real Google Gemini 1.5 Flash directly through your C++ backend. Your key is stored securely on your local server (<code style="color:var(--accent-mint);">data/gemini_key.txt</code>) and never exposed publicly.
-              </p>
-              <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-                <input type="password" id="gemini-api-key-input" class="form-control" style="flex:1; min-width:260px;" placeholder="Paste your Gemini API key (AIzaSy...)" autocomplete="off">
-                <button type="button" class="btn-primary action-btn" style="padding:0.6rem 1.4rem;" onclick="app.saveGeminiKey()">💾 Save &amp; Connect Key</button>
-                <button type="button" class="action-btn" style="padding:0.6rem 1rem;" onclick="app.clearGeminiKey()">Remove Key</button>
-              </div>
-              <div id="gemini-key-status" style="margin-top:0.6rem; font-size:0.8rem; color:var(--text-secondary);"></div>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
